@@ -4,7 +4,7 @@
 
 int main() {
     printf("Codigo iniciado\n");
-    FILE* arquivo = fopen("testes SBAS/teste5.txt", "r");
+    FILE* arquivo = fopen("testes SBAS/teste1.txt", "r");
     if (arquivo == NULL) {
         return -1;
     }

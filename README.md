@@ -1,7 +1,7 @@
 # SOBA T2
 ## ESPACOS DE DADOS E SUAS CORRESPONDENCIAS EM ASM
 
-**Variaveis**
+**Variaveis** <br />
 v1 - rbx <br />
 v2 - r12 <br />
 v3 - r13 <br />
@@ -9,7 +9,7 @@ v4 - r14 <br />
 v5 - r15 <br />
 > TODAS TEM QUE SER SALVAS NO STACK PQ SAO CALLEE SAVED
 
-**Parametros**
+**Parametros** <br />
 p1 - rdi <br />
 p2 - rsi <br />
 p3 - rdx <br />

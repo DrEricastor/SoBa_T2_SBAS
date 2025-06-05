@@ -6,23 +6,29 @@
 // 2. operação
 // 3. desvio
 // 4. retorno
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-#include <peqcomp.h>
+#include "peqcomp.h"
+
+
 funcp peqcomp (FILE *f, unsigned char codigo[]) {
-    char buffer[10000];
+    printf("Entrando na peqcomp()\n");
+    char bufferLinha[100];
     char *pbuff;
     int value;
 
-    while (1) {
-        if (!fgets(buffer, sizeof buffer, stdin)) break;
-        printf("Line contains");
-        pbuff = buffer;
-        while (1) {
-            if (*pbuff == '\n') break;
-            value = strtol(pbuff, &pbuff, 10);
-            printf(" %d", value);
+    printf("Iniciando leitura do Arquivo\n\n");
+
+    int numLinha = 1;
+    while (fgets(bufferLinha, sizeof(bufferLinha), f) != NULL) {
+        if (strlen(bufferLinha) == 0) {
+            printf("Linha vazia encontrada. Parando a leitura.\n");
+            break;
         }
+        printf("%d: ", numLinha++);
+        printf(bufferLinha);
+    }
     printf("\n");
-  }
-    fread
-}   
+}

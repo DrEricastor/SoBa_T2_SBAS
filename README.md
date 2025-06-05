@@ -2,17 +2,17 @@
 ## ESPACOS DE DADOS E SUAS CORRESPONDENCIAS EM ASM
 
 **Variaveis**
-v1 - rbx
-v2 - r12
-v3 - r13
-v4 - r14
-v5 - r15
+v1 - rbx <br />
+v2 - r12 <br />
+v3 - r13 <br />
+v4 - r14 <br />
+v5 - r15 <br />
 > TODAS TEM QUE SER SALVAS NO STACK PQ SAO CALLEE SAVED
 
 **Parametros**
-p1 - rdi
-p2 - rsi
-p3 - rdx
+p1 - rdi <br />
+p2 - rsi <br />
+p3 - rdx <br />
 > SÃO OS ARGUMENTOS DA ARQUITETURA ASSEMBLY EM ORDEM
 
 ## COMANDOS E SUAS CORRESPONDENCIAS EM ASM
@@ -20,13 +20,13 @@ p3 - rdx
 > mov varpc, var
 
 **var = varc op varc**
-> mov varc2, var
+> mov varc2, var <br />
 > op varc1, var
 
 **ret varc**
-> mov varc, %rax
+> mov varc, %rax <br />
 > ret
 
 **iflez var num**
-> cmp var, $0
+> cmp var, $0 <br />
 > jle num

@@ -12,11 +12,69 @@
 
 #include "peqcomp.h"
 
-void iflez(char* linha, unsigned char codigo[], int codigoI) {
+char varNum2opcMask(char num) {
+    switch (num) {
+        case '1': 
+            //rbx
+            break;
+        case '2': 
+            //r12
+            break;
+        case '3': 
+            //r13
+            break;
+        case '4': 
+            //r14
+            break;
+        case '5': 
+            //r15
+            break;
+    }
+}
+char parNum2opcMask(int num) {
+    switch (num) {
+        case '1': 
+            //rdi
+            break;
+        case '2': 
+            //rsi
+            break;
+        case '3': 
+            //rdx
+            break;
+    }
+}
+
+void prologo(unsigned char codigo[], int* codigoI) {
+    
+    //faz push em todos os registradores que nós vamos utilizar durante a função (eles são callee saved)
+    codigo[(*codigoI)++] = (char) 0x53;
+    codigo[(*codigoI)++] = (char) 0x4154;
+    codigo[(*codigoI)++] = (char) 0x4155;
+    codigo[(*codigoI)++] = (char) 0x4156;
+    codigo[(*codigoI)++] = (char) 0x4157;
+
+    return;
+    
+}
+void epilogo(unsigned char codigo[], int* codigoI) {
+
+    //faz pop em todos os registradores que nós utilizamos durante a função (eles são callee saved)
+    codigo[(*codigoI)++] = (char) 0x415f;
+    codigo[(*codigoI)++] = (char) 0x415e;
+    codigo[(*codigoI)++] = (char) 0x415d;
+    codigo[(*codigoI)++] = (char) 0x415c;
+    codigo[(*codigoI)++] = (char) 0x5b;
+
     return;
 }
 
-void ret(char* linha, unsigned char codigo[], int codigoI) {
+void iflez(char* linha, unsigned char codigo[], int* codigoI) {
+    return;
+}
+
+
+void ret(char* linha, unsigned char codigo[], int* codigoI) {
     //ret varc
     int num;
     if (linha[4] == '$') {
@@ -36,30 +94,28 @@ void ret(char* linha, unsigned char codigo[], int codigoI) {
     }
 } 
 
-void attVar(char* linha, unsigned char codigo[], int codigoI) {
+
+void attVar(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     char srcNum = linha[6]; //onde pegar?
-
-    if (dstNum == '1') {
-        //rbx
-    }
+    
 
     //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
-void attPar(char* linha, unsigned char codigo[], int codigoI) {
+void attPar(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     int srcNum = linha[6]; //onde pegar?
 
     //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
-void attConst(char* linha, unsigned char codigo[], int codigoI) {
+void attConst(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     int num = linha[6] - '0'; //onde pegar?
 
     //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
 
-void att(char* linha, unsigned char codigo[], int codigoI) {
+void att(char* linha, unsigned char codigo[], int* codigoI) {
     //var : varpc
     //v1 : v2
 
@@ -76,20 +132,31 @@ void att(char* linha, unsigned char codigo[], int codigoI) {
 }
 
 
-void opVarVar(char* linha, unsigned char codigo[], int codigoI) {
-    int dstNum = linha[1]; //onde botar?
-    int src1Num = linha[6]; //onde pegar primeiro?
-    int src2Num = linha[11]; //onde pegar primeiro?
+void opVarVar(char* linha, unsigned char codigo[], int* codigoI) {
+    char dstMask = varNum2opcMask(linha[1]); //onde botar?
+    char src1mask = varNum2opcMask(linha[6]); //onde pegar primeiro?
+    char src2mask = varNum2opcMask(linha[11]); //onde pegar segundo?
 
     //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
-void opVarConst(char* linha, unsigned char codigo[], int codigoI) {}
-void opConstVar(char* linha, unsigned char codigo[], int codigoI) {}
-void opConstConst(char* linha, unsigned char codigo[], int codigoI) {}
+void opVarConst(char* linha, unsigned char codigo[], int* codigoI) {
+    char dstMask = varNum2opcMask(linha[1]); //onde botar?
+    char src1mask = varNum2opcMask(linha[6]); //onde pegar primeiro?
+    int src2num = linha[11]-'0'; //onde pegar segundo?
 
-void op(char* linha, unsigned char codigo[], int codigoI) {
+    //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
+}
+void opConstVar(char* linha, unsigned char codigo[], int* codigoI) {
+    char dstMask = varNum2opcMask(linha[1]); //onde botar?
+    int src1num = linha[6]-'0'; //onde pegar primeiro?
+    char src2mask = varNum2opcMask(linha[11]); //onde pegar segundo?
+
+    //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
+}
+void opConstConst(char* linha, unsigned char codigo[], int* codigoI) {}
+
+void op(char* linha, unsigned char codigo[], int* codigoI) {
     //var = varc op varc
-    //v1 = v1 + $2
     char src1tipo = linha[5];
     char src2tipo = linha[10];
 
@@ -106,7 +173,7 @@ void op(char* linha, unsigned char codigo[], int codigoI) {
     return;
 }
 
-void leArquivo(FILE* f, unsigned char codigo[], int codigoI) {
+void leArquivo(FILE* f, unsigned char codigo[], int* codigoI) {
     printf("Entrando na peqcomp()\n");
     char bufferLinha[100];
     char *pbuff;
@@ -140,5 +207,5 @@ void leArquivo(FILE* f, unsigned char codigo[], int codigoI) {
 
 funcp peqcomp (FILE *f, unsigned char codigo[]) {
     int codigoI = 0; //indice do array de codigo atual
-    leArquivo(f, codigo, codigoI);
+    leArquivo(f, codigo, &codigoI);
 }

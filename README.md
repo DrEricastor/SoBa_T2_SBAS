@@ -20,13 +20,13 @@ p3 - rdx
 > mov varpc, var
 
 **var = varc op varc**
-> mov varc2, var \n
+> mov varc2, var
 > op varc1, var
 
 **ret varc**
-> mov varc, %rax \n
+> mov varc, %rax
 > ret
 
 **iflez var num**
-> cmp var, $0 \n
+> cmp var, $0
 > jle num

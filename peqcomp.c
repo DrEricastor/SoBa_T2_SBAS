@@ -74,15 +74,21 @@ void iflez(char* linha, unsigned char codigo[], int* codigoI) {
 }
 
 
+void opcodeRetConst(char* linha, unsigned char codigo[], int* codigoI) {
+    int cst = 0;
+    if (linha[5] == '-') {
+        cst = (linha[6] - '0') *-1;
+    } else {
+        cst = linha[5] - '0';
+    }
+    
+}
+
 void ret(char* linha, unsigned char codigo[], int* codigoI) {
     //ret varc
     int num;
     if (linha[4] == '$') {
-        if (linha[5] == '-') {
-            num = (linha[6] - '0') *-1;
-        } else {
-            num = linha[5] - '0';
-        }
+        
         printf("constante = %d\n", num);
         // agora que descobrimos a constante, incluimos os opcodes das seguintes
         // instruções no vetor codigo:

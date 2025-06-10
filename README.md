@@ -31,6 +31,21 @@ p3 - rdx <br />
 > cmp var, $0 <br />
 > jle num
 
+
+# FODASE TUDO ISSO AQUI EM BAIXO USA r8 E r9 PRAS OPERAÇÕES KK
+## opcodes ret
+   0:   48 89 d8                mov    %rbx,%rax
+   3:   4c 89 e0                mov    %r12,%rax
+   6:   4c 89 e8                mov    %r13,%rax
+   9:   4c 89 f0                mov    %r14,%rax
+   c:   4c 89 f8                mov    %r15,%rax
+
+   f:   48 c7 c0 0a 00 00 00    mov    $0xa,%rax
+  16:   48 c7 c0 00 01 00 00    mov    $0x100,%rax
+  1d:   48 c7 c0 ff ff ff ff    mov    $0xffffffffffffffff,%rax
+
+  10:   c3                      ret
+
 ## opcodes mov
    0:   48 89 db                mov    %rbx,%rbx
    3:   49 89 dc                mov    %rbx,%r12
@@ -117,9 +132,46 @@ p3 - rdx <br />
   33:   4d 29 f5                sub    %r14,%r13
   36:   4d 29 f6                sub    %r14,%r14
   39:   4d 29 f7                sub    %r14,%r15
-  
+
   3c:   4c 29 fb                sub    %r15,%rbx
   3f:   4d 29 fc                sub    %r15,%r12
   42:   4d 29 fd                sub    %r15,%r13
   45:   4d 29 fe                sub    %r15,%r14
   48:   4d 29 ff                sub    %r15,%r15
+
+  ## opcodes op (*)
+   0:   48 0f af db             imul   %rbx,%rbx
+   4:   4c 0f af e3             imul   %rbx,%r12
+   8:   4c 0f af eb             imul   %rbx,%r13
+   c:   4c 0f af f3             imul   %rbx,%r14
+  10:   4c 0f af fb             imul   %rbx,%r15
+
+  14:   49 0f af dc             imul   %r12,%rbx
+  18:   4d 0f af e4             imul   %r12,%r12
+  1c:   4d 0f af ec             imul   %r12,%r13
+  20:   4d 0f af f4             imul   %r12,%r14
+  24:   4d 0f af fc             imul   %r12,%r15
+
+  28:   49 0f af dd             imul   %r13,%rbx
+  2c:   4d 0f af e5             imul   %r13,%r12
+  30:   4d 0f af ed             imul   %r13,%r13
+  34:   4d 0f af f5             imul   %r13,%r14
+  38:   4d 0f af fd             imul   %r13,%r15
+
+  3c:   49 0f af de             imul   %r14,%rbx
+  40:   4d 0f af e6             imul   %r14,%r12
+  44:   4d 0f af ee             imul   %r14,%r13
+  48:   4d 0f af f6             imul   %r14,%r14
+  4c:   4d 0f af fe             imul   %r14,%r15
+
+  50:   49 0f af df             imul   %r15,%rbx
+  54:   4d 0f af e7             imul   %r15,%r12
+  58:   4d 0f af ef             imul   %r15,%r13
+  5c:   4d 0f af f7             imul   %r15,%r14
+  60:   4d 0f af ff             imul   %r15,%r15
+
+
+## Perguntas
+1. constante é sempre de um digito?
+2. Padrao das instruções
+3. Usar registradores e instruções 64 mesmo sendo 32

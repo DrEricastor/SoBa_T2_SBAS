@@ -46,30 +46,72 @@ p3 - rdx <br />
 
   10:   c3                      ret
 
-
+## opcodes mov
    0:   49 89 d8                mov    %rbx,%r8
    3:   4d 89 e0                mov    %r12,%r8
    6:   4d 89 e8                mov    %r13,%r8
    9:   4d 89 f0                mov    %r14,%r8
    c:   4d 89 f8                mov    %r15,%r8
+
    f:   49 89 d9                mov    %rbx,%r9
   12:   4d 89 e1                mov    %r12,%r9
   15:   4d 89 e9                mov    %r13,%r9
   18:   4d 89 f1                mov    %r14,%r9
   1b:   4d 89 f9                mov    %r15,%r9
+
   1e:   4c 89 c3                mov    %r8,%rbx
   21:   4d 89 c4                mov    %r8,%r12
   24:   4d 89 c5                mov    %r8,%r13
   27:   4d 89 c6                mov    %r8,%r14
   2a:   4d 89 c7                mov    %r8,%r15
+  
   2d:   4c 89 cb                mov    %r9,%rbx
   30:   4d 89 cc                mov    %r9,%r12
   33:   4d 89 cd                mov    %r9,%r13
   36:   4d 89 ce                mov    %r9,%r14
   39:   4d 89 cf                mov    %r9,%r15
+
+; Movimentos dos parâmetros (rdi, rsi, rdx) para r8
+; movq %rdi, %r8
+4C 89 C7
+; movq %rsi, %r8
+4C 89 CE
+; movq %rdx, %r8
+4C 89 C2
+
+; Movimentos dos parâmetros (rdi, rsi, rdx) para r9
+; movq %rdi, %r9
+4C 89 CF
+; movq %rsi, %r9
+4C 89 C6
+; movq %rdx, %r9
+4C 89 CA
+
+; Movimentos de r8 para os parâmetros (rdi, rsi, rdx)
+; movq %r8, %rdi
+4C 89 C0
+; movq %r8, %rsi
+4C 89 C0
+; movq %r8, %rdx
+4C 89 C2
+
+; Movimentos de r9 para os parâmetros (rdi, rsi, rdx)
+; movq %r9, %rdi
+4C 89 C1
+; movq %r9, %rsi
+4C 89 C1
+; movq %r9, %rdx
+4C 89 CA
+
   3c:   c9                      leave
   3d:   c3                      ret
 
-## Perguntas
+# Perguntas
 1. tem problema eu adicionar o int diretamente no opcode de constantes?
 2. Usar registradores e instruções 64 mesmo sendo 32
+3. como eu boto label no opcode kk
+
+# A Fazer
+1. Remover "opcode para leave" 0xc9
+2. remover push e pop e adaptar pra manipulação no stacks
+3. erro em um dos opcodes da função opcodeMovPxr8

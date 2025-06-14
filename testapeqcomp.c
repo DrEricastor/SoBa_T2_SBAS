@@ -13,7 +13,7 @@ int main() {
     char codigo[1000];
     printf("Vetor codigo[1000] criado\n");
 
-    peqcomp(arquivo, codigo);
+    funcp ret = peqcomp(arquivo, codigo);
 
     printf("Fim do Teste \n \n");
 }

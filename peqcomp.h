@@ -1,3 +1,3 @@
 #include <stdio.h>
-typedef int (*funcp) ();
+typedef int (*funcp) (int);
 funcp peqcomp(FILE *f, unsigned char codigo[]);

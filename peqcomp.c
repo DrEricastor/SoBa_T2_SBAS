@@ -12,39 +12,6 @@
 
 #include "peqcomp.h"
 
-char varNum2opcMask(char num) {
-    switch (num) {
-        case '1': 
-            //rbx
-            break;
-        case '2': 
-            //r12
-            break;
-        case '3': 
-            //r13
-            break;
-        case '4': 
-            //r14
-            break;
-        case '5': 
-            //r15
-            break;
-    }
-}
-char parNum2opcMask(int num) {
-    switch (num) {
-        case '1': 
-            //rdi
-            break;
-        case '2': 
-            //rsi
-            break;
-        case '3': 
-            //rdx
-            break;
-    }
-}
-
 void opcodeMovVxr8(int numV, unsigned char codigo[], int* codigoI) {
     int opcode = 0;
     switch (numV) {
@@ -123,7 +90,6 @@ void prologo(unsigned char codigo[], int* codigoI) {
     codigo[(*codigoI)++] = 0x4157;
 
     return;
-    
 }
 void epilogo(unsigned char codigo[], int* codigoI) {
 
@@ -183,24 +149,27 @@ void ret(char* linha, unsigned char codigo[], int* codigoI) {
 
 
 void attVar(char* linha, unsigned char codigo[], int* codigoI) {
-    char dstNum = linha[1]; //onde botar?
-    char srcNum = linha[6]; //onde pegar?
+    char dstNum = 0; //onde botar?
+    int srcNum = 0; //onde pegar?
+    sscanf(linha, "v%d : v%d",&dstNum, &srcNum);
     
     opcodeMovVxr8(srcNum, codigo, codigoI); // manda pra r8
     opcodeMovr8Vx(dstNum, codigo, codigoI); // manda de r8 pra dst (var)
 
 }
 void attPar(char* linha, unsigned char codigo[], int* codigoI) {
-    char dstNum = linha[1]; //onde botar?
-    int srcNum = linha[6]; //onde pegar?
+    char dstNum = 0; //onde botar?
+    int srcNum = 0; //onde pegar?
+    sscanf(linha, "v%d : p%d",&dstNum, &srcNum);
 
     opcodeMovVxr8(srcNum, codigo, codigoI); // manda pra r8
     opcodeMovr8Px(dstNum, codigo, codigoI); // manda de r8 pra dst (par)
 
 }
 void attConst(char* linha, unsigned char codigo[], int* codigoI) {
-    char dstNum = linha[1]; //onde botar?
-    int num = linha[6] - '0'; //onde pegar?
+    char dstNum = 0; //onde botar?
+    int num = 0; //onde pegar?
+    sscanf(linha, "v%d : $%d",&dstNum, &num);
 
     //TODO: sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }

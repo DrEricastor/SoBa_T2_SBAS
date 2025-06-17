@@ -115,3 +115,24 @@ p3 - rdx <br />
 1. Remover "opcode para leave" 0xc9
 2. remover push e pop e adaptar pra manipulação no stacks
 3. erro em um dos opcodes da função opcodeMovPxr8
+4. constantes
+5. jlez
+6. 2 vetores: 
+  1- linhas: linhas[1] = 0x12345678 (endereco da linha 1)
+  2- jlezEndDst: codigoIJlez (int) | dst (int)
+
+
+Resposa ao jump: passagem dupla, deixa lacunas, preenche no final da primeira passagem.
+
+v1 : v2
+v3 = v2 + v3
+1 mov v2, r8
+1 mov r8, v1
+2 mov r8, v2
+2 mov r9, v3
+2 add r8, r9
+
+jlez 2
+
+
+&codigo[4]

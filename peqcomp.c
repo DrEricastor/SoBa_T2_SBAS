@@ -1,5 +1,5 @@
 /* Ernesto Dornelles Ituassu 2411616 Turma: 3WC */
-/* João Henrique Pestana de Aguiar Godinho 2412107 Turma: 3WC */
+/* Nome_do_Aluno2 Matricula Turma */
 
 
 // 1. atribuição
@@ -45,14 +45,82 @@ char parNum2opcMask(int num) {
     }
 }
 
+void opcodeMovVxr8(int numV, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numV) {
+        case 1: opcode = 0x4989d8;
+        case 2: opcode = 0x4d89e0;
+        case 3: opcode = 0x4d89e8;
+        case 4: opcode = 0x4d89f0;
+        case 5: opcode = 0x4d89f8;
+    }
+
+    codigo[(*codigoI)++] = opcode;
+}
+void opcodeMovVxr9(int numV, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numV) {
+        case 1: opcode = 0x4989d9;
+        case 2: opcode = 0x4d89e1;
+        case 3: opcode = 0x4d89e9;
+        case 4: opcode = 0x4d89f1;
+        case 5: opcode = 0x4d89f9;
+    }
+
+    codigo[(*codigoI)++] = opcode;
+}
+void opcodeMovr8Vx(int numV, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numV) {
+        case 1: opcode = 0x4c89c3;
+        case 2: opcode = 0x4d89c4;
+        case 3: opcode = 0x4d89c5;
+        case 4: opcode = 0x4d89c6;
+        case 5: opcode = 0x4d89c7;
+    }
+
+    codigo[(*codigoI)++] = opcode;
+}
+void opcodeMovr9Vx(int numV, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numV) {
+        case 1: opcode = 0x4c89cb;
+        case 2: opcode = 0x4d89cc;
+        case 3: opcode = 0x4d89cd;
+        case 4: opcode = 0x4d89ce;
+        case 5: opcode = 0x4d89cf;
+    }
+
+    codigo[(*codigoI)++] = opcode;
+}
+
+void opcodeMovPxr8(int numP, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numP) {
+        case 1: opcode = 0x4C89C7;
+        case 2: opcode = 0x4C89CE;
+        case 3: opcode = 0x4C89C2;
+    }
+    codigo[(*codigoI)++] = opcode;
+}
+void opcodeMovr8Px(int numP, unsigned char codigo[], int* codigoI) {
+    int opcode = 0;
+    switch (numP) {
+        case 1: opcode = 0x4C89C0;
+        case 2: opcode = 0x4C89C0; // TODO TEM UM ERRO AQUI
+        case 3: opcode = 0x4C89C2;
+    }
+    codigo[(*codigoI)++] = opcode;
+}
+
 void prologo(unsigned char codigo[], int* codigoI) {
     
     //faz push em todos os registradores que nós vamos utilizar durante a função (eles são callee saved)
-    codigo[(*codigoI)++] = (char) 0x53;
-    codigo[(*codigoI)++] = (char) 0x4154;
-    codigo[(*codigoI)++] = (char) 0x4155;
-    codigo[(*codigoI)++] = (char) 0x4156;
-    codigo[(*codigoI)++] = (char) 0x4157;
+    codigo[(*codigoI)++] = 0x53;
+    codigo[(*codigoI)++] = 0x4154;
+    codigo[(*codigoI)++] = 0x4155;
+    codigo[(*codigoI)++] = 0x4156;
+    codigo[(*codigoI)++] = 0x4157;
 
     return;
     
@@ -60,14 +128,15 @@ void prologo(unsigned char codigo[], int* codigoI) {
 void epilogo(unsigned char codigo[], int* codigoI) {
 
     //faz pop em todos os registradores que nós utilizamos durante a função (eles são callee saved)
-    codigo[(*codigoI)++] = (char) 0x415f;
-    codigo[(*codigoI)++] = (char) 0x415e;
-    codigo[(*codigoI)++] = (char) 0x415d;
-    codigo[(*codigoI)++] = (char) 0x415c;
-    codigo[(*codigoI)++] = (char) 0x5b;
+    codigo[(*codigoI)++] = 0x415f;
+    codigo[(*codigoI)++] = 0x415e;
+    codigo[(*codigoI)++] = 0x415d;
+    codigo[(*codigoI)++] = 0x415c;
+    codigo[(*codigoI)++] = 0x5b;
 
     return;
 }
+
 
 void iflez(char* linha, unsigned char codigo[], int* codigoI) {
     return;
@@ -76,11 +145,29 @@ void iflez(char* linha, unsigned char codigo[], int* codigoI) {
 
 void opcodeRetConst(char* linha, unsigned char codigo[], int* codigoI) {
     int cst = 0;
-    if (linha[5] == '-') {
-        cst = (linha[6] - '0') *-1;
-    } else {
-        cst = linha[5] - '0';
+    sscanf(linha, "ret $%d", &cst);
+    int opcode = 0x48c7c0000000 + cst;
+    codigo[(*codigoI)++] = opcode;
+    codigo[(*codigoI)++] = 0xc9; // opcode para leave
+    codigo[(*codigoI)++] = 0xc3; // opcode para ret
+
+}
+void opcodeRetVar(char* linha, unsigned char codigo[], int* codigoI) {
+    int reg = 0;
+    int opcode = 0;
+    sscanf(linha, "ret v%d", &reg);
+    switch (reg) {
+        case 1: opcode = 0x4889d8;
+        case 2: opcode = 0x4889e0;
+        case 3: opcode = 0x4889e8;
+        case 4: opcode = 0x4889f0;
+        case 5: opcode = 0x4889f8;
     }
+    codigo[(*codigoI)++] = opcode;
+    codigo[(*codigoI)++] = 0xc9; // opcode para leave
+    codigo[(*codigoI)++] = 0xc3; // opcode para ret
+
+
     
 }
 
@@ -88,15 +175,9 @@ void ret(char* linha, unsigned char codigo[], int* codigoI) {
     //ret varc
     int num;
     if (linha[4] == '$') {
-        
-        printf("constante = %d\n", num);
-        // agora que descobrimos a constante, incluimos os opcodes das seguintes
-        // instruções no vetor codigo:
-        // mov num, %rax
-        // ret
-
+        opcodeRetConst(linha, codigo, codigoI);
     } else {
-        //entao ret recebe uma variavel, que vai estar dentro de um registrador
+        opcodeRetVar(linha, codigo, codigoI);
     }
 } 
 
@@ -105,20 +186,23 @@ void attVar(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     char srcNum = linha[6]; //onde pegar?
     
+    opcodeMovVxr8(srcNum, codigo, codigoI); // manda pra r8
+    opcodeMovr8Vx(dstNum, codigo, codigoI); // manda de r8 pra dst (var)
 
-    //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
 void attPar(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     int srcNum = linha[6]; //onde pegar?
 
-    //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
+    opcodeMovVxr8(srcNum, codigo, codigoI); // manda pra r8
+    opcodeMovr8Px(dstNum, codigo, codigoI); // manda de r8 pra dst (par)
+
 }
 void attConst(char* linha, unsigned char codigo[], int* codigoI) {
     char dstNum = linha[1]; //onde botar?
     int num = linha[6] - '0'; //onde pegar?
 
-    //sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
+    //TODO: sabendo ambas as infos, ver o opcode dos comandos e botar em codigo
 }
 
 void att(char* linha, unsigned char codigo[], int* codigoI) {
